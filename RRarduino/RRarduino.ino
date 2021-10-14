@@ -22,7 +22,7 @@ void setup() {
   motor4.run(RELEASE);
 }
 
-void joystickToExpo(float joystick){
+float joystickToExpo(float joystick){
   float joystickCubed = joystick*joystick*joystick;
   return joystickCubed*s+joystick*(1-s);
 }
