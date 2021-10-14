@@ -39,10 +39,13 @@ void loop() {
     joystickY2 = -1;
   }
 
-  setVelocity(motor1, joystickY * 255);
-  setVelocity(motor4, joystickY * 255);
-  setVelocity(motor2, joystickY2 * 255);
-  setVelocity(motor3, joystickY2 * 255);
+  float expo = joystickY*joystickY*joystickY;
+  float expo = joystickY2*joystickY2*joystickY2;
+
+  setVelocity(motor1, expo * 255);
+  setVelocity(motor4, expo * 255);
+  setVelocity(motor2, expo2 * 255);
+  setVelocity(motor3, expo2 * 255);
 
   // motor1.setSpeed(abs(joystickY * 255));
   // motor4.setSpeed(abs(joystickY * 255));
