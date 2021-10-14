@@ -40,7 +40,7 @@ void loop() {
   }
 
   float expo = joystickY*joystickY*joystickY;
-  float expo = joystickY2*joystickY2*joystickY2;
+  float expo2 = joystickY2*joystickY2*joystickY2;
 
   setVelocity(motor1, expo * 255);
   setVelocity(motor4, expo * 255);
