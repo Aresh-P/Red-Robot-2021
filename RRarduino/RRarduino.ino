@@ -8,7 +8,8 @@ AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
 float s = 0.75;
-int max_speed = 175;
+int max_speed = 190;
+float approach_speed = .75;
 
 void setup() {
   Serial.begin(19200);
@@ -40,11 +41,11 @@ void loop() {
   get_joystick2_values(&joystickX2, &joystickY2);
 
   if (get_button_value(BTN_UP_2) == PRESSED) {
-    joystickY = .6;
-    joystickY2 = .6;
+    joystickY = approach_speed;
+    joystickY2 = approach_speed;
   } else if (get_button_value(BTN_DOWN_2) == PRESSED) {
-    joystickY = -.6;
-    joystickY2 = -.6;
+    joystickY = -approach_speed;
+    joystickY2 = -approach_speed;
   }
 
   float expo = joystickToExpo(joystickY);
