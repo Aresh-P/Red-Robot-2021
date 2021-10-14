@@ -7,6 +7,8 @@ AF_DCMotor motor2(2);
 AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
+float s = 0.5;
+
 void setup() {
   Serial.begin(19200);
   motor1.setSpeed(0);
@@ -18,6 +20,11 @@ void setup() {
   motor2.run(RELEASE);
   motor3.run(RELEASE);
   motor4.run(RELEASE);
+}
+
+void joystickToExpo(float joystick){
+  float joystickCubed = joystick*joystick*joystick;
+  return joystickCubed*s+joystick*(1-s);
 }
 
 void setVelocity(AF_DCMotor motor, float v){
@@ -39,8 +46,8 @@ void loop() {
     joystickY2 = -1;
   }
 
-  float expo = joystickY*joystickY*joystickY;
-  float expo2 = joystickY2*joystickY2*joystickY2;
+  float expo = joystickToExpo(joystickY);
+  float expo2 = joystickToExpo(joystickY2);
 
   setVelocity(motor1, expo * 255);
   setVelocity(motor4, expo * 255);
