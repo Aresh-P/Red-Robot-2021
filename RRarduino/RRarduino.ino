@@ -30,7 +30,7 @@ float joystickToExpo(float joystick){
 }
 
 void setVelocity(AF_DCMotor motor, float v){
-  motor.setSpeed(abs(v));
+  motor.setSpeed(min(abs(v), 255));
   motor.run(v >= 0 ? FORWARD : BACKWARD);
 }
 
