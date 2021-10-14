@@ -8,8 +8,8 @@ AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
 float s = 0.75;
-int max_speed = 190;
-float approach_speed = .75;
+int max_speed = 255;
+float approach_speed = .5;
 
 void setup() {
   Serial.begin(19200);
@@ -24,12 +24,12 @@ void setup() {
   motor4.run(RELEASE);
 }
 
-float joystickToExpo(float joystick){
-  float joystickCubed = joystick*joystick*joystick;
-  return joystickCubed*s+joystick*(1-s);
+float joystickToExpo(float joystick) {
+  float joystickCubed = joystick * joystick * joystick;
+  return joystickCubed * s + joystick * (1 - s);
 }
 
-void setVelocity(AF_DCMotor motor, float v){
+void setVelocity(AF_DCMotor motor, float v) {
   motor.setSpeed(min(abs(v), 255));
   motor.run(v >= 0 ? FORWARD : BACKWARD);
 }
@@ -51,8 +51,14 @@ void loop() {
   float expo = joystickToExpo(joystickY);
   float expo2 = joystickToExpo(joystickX2);
 
-  float v1 = expo+expo2;
-  float v2 = expo-expo2;
+  float v1 = expo + expo2;
+  float v2 = expo - expo2;
+
+  float theta = atan2(abs(v2), abs(v1))-(PI/4);
+  float scaleCorrect = cos(theta)*cos(theta);
+
+  v1 *= scaleCorrect;
+  v2 *= scaleCorrect;
 
   setVelocity(motor1, v1 * max_speed);
   setVelocity(motor4, v1 * max_speed);
