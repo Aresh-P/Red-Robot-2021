@@ -8,6 +8,7 @@ AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
 float s = 0.75;
+int max_speed = 175;
 
 void setup() {
   Serial.begin(19200);
@@ -39,25 +40,25 @@ void loop() {
   get_joystick2_values(&joystickX2, &joystickY2);
 
   if (get_button_value(BTN_UP_2) == PRESSED) {
-    joystickY = 1;
-    joystickY2 = 1;
+    joystickY = .6;
+    joystickY2 = .6;
   } else if (get_button_value(BTN_DOWN_2) == PRESSED) {
-    joystickY = -1;
-    joystickY2 = -1;
+    joystickY = -.6;
+    joystickY2 = -.6;
   }
 
   float expo = joystickToExpo(joystickY);
   float expo2 = joystickToExpo(joystickY2);
 
-  setVelocity(motor1, expo * 255);
-  setVelocity(motor4, expo * 255);
-  setVelocity(motor2, expo2 * 255);
-  setVelocity(motor3, expo2 * 255);
+  setVelocity(motor1, expo * max_speed);
+  setVelocity(motor4, expo * max_speed);
+  setVelocity(motor2, expo2 * max_speed);
+  setVelocity(motor3, expo2 * max_speed);
 
-  // motor1.setSpeed(abs(joystickY * 255));
-  // motor4.setSpeed(abs(joystickY * 255));
-  // motor2.setSpeed(abs(joystickY2 * 255));
-  // motor3.setSpeed(abs(joystickY2 * 255));
+  // motor1.setSpeed(abs(joystickY * max_speed));
+  // motor4.setSpeed(abs(joystickY * max_speed));
+  // motor2.setSpeed(abs(joystickY2 * max_speed));
+  // motor3.setSpeed(abs(joystickY2 * max_speed));
 
   // motor1.run(joystickY >= 0 ? FORWARD : BACKWARD);
   // motor4.run(joystickY >= 0 ? FORWARD : BACKWARD);
@@ -76,5 +77,5 @@ void loop() {
   //  motor2.run(speed - bias >= 0 ? FORWARD : BACKWARD);
   //  motor3.run(speed - bias >= 0 ? FORWARD : BACKWARD);
 
-  delay(100); // IMPORTANT: Don't overload the ESP Chip with too many requests!
+  delay(30); // IMPORTANT: Don't overload the ESP Chip with too many requests!
 }
