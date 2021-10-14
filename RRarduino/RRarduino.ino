@@ -20,6 +20,11 @@ void setup() {
   motor4.run(RELEASE);
 }
 
+void setVelocity(AF_DCMotor motor, float v){
+  motor.setSpeed(abs(v));
+  motor.run(v >= 0 ? FORWARD : BACKWARD);
+}
+
 void loop() {
   float joystickX, joystickY;
   float joystickX2, joystickY2;
@@ -34,15 +39,20 @@ void loop() {
     joystickY2 = -1;
   }
 
-  motor1.setSpeed(abs(joystickY * 255));
-  motor4.setSpeed(abs(joystickY * 255));
-  motor2.setSpeed(abs(joystickY2 * 255));
-  motor3.setSpeed(abs(joystickY2 * 255));
+  setVelocity(motor1, joystickY * 255);
+  setVelocity(motor4, joystickY * 255);
+  setVelocity(motor2, joystickY2 * 255);
+  setVelocity(motor3, joystickY2 * 255);
 
-  motor1.run(joystickY >= 0 ? FORWARD : BACKWARD);
-  motor4.run(joystickY >= 0 ? FORWARD : BACKWARD);
-  motor2.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
-  motor3.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
+  // motor1.setSpeed(abs(joystickY * 255));
+  // motor4.setSpeed(abs(joystickY * 255));
+  // motor2.setSpeed(abs(joystickY2 * 255));
+  // motor3.setSpeed(abs(joystickY2 * 255));
+
+  // motor1.run(joystickY >= 0 ? FORWARD : BACKWARD);
+  // motor4.run(joystickY >= 0 ? FORWARD : BACKWARD);
+  // motor2.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
+  // motor3.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
 
   //  int speed = int(joystickY * 127);
   //  int bias = int(joystickX * 127);
