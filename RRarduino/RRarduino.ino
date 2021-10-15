@@ -55,10 +55,18 @@ void loop() {
     float vp1 = expo + expo2;
     float vp2 = expo - expo2;
 
-    float scaleCorrect = 1/max(abs(vp1), abs(vp2));
+    float avp1 = abs(vp1);
+    float avp2 = abs(vp2);
 
-    v1 = vp1*scaleCorrect;
-    v2 = vp2*scaleCorrect;
+    if (avp1 <= 1 && avp2 <= 1) {
+      scaleCorrect = 1;
+    }
+    else {
+      scaleCorrect = 1 / max(avp1, avp2);
+    }
+
+    v1 = vp1 * scaleCorrect;
+    v2 = vp2 * scaleCorrect;
   }
 
   setVelocity(motor1, v1 * max_speed);
