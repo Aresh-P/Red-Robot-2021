@@ -58,6 +58,8 @@ void loop() {
     float avp1 = abs(vp1);
     float avp2 = abs(vp2);
 
+    float scaleCorrect;
+
     if (avp1 <= 1 && avp2 <= 1) {
       scaleCorrect = 1;
     }
