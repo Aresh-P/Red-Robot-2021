@@ -1,3 +1,5 @@
+#define NUM_BTNS 15
+
 #define BTN_UP_1 'a'
 #define BTN_DOWN_1 'b'
 #define BTN_UP_2 'c'

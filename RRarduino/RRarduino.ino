@@ -11,6 +11,20 @@ float s = 0.75;
 int max_speed = 255;
 float approach_speed = .5;
 
+bool motorDir = true;
+
+struct buttonState {
+  char id;
+  bool pressed;
+  bool justPressed;
+  bool justLifted;
+};
+
+float joystickToExpo(float joystick) {
+  float joystickCubed = joystick * joystick * joystick;
+  return joystickCubed * s + joystick * (1 - s);
+}
+
 void setup() {
   Serial.begin(19200);
   motor1.setSpeed(0);
@@ -22,11 +36,6 @@ void setup() {
   motor2.run(RELEASE);
   motor3.run(RELEASE);
   motor4.run(RELEASE);
-}
-
-float joystickToExpo(float joystick) {
-  float joystickCubed = joystick * joystick * joystick;
-  return joystickCubed * s + joystick * (1 - s);
 }
 
 void setVelocity(AF_DCMotor motor, float v) {
@@ -52,28 +61,28 @@ void loop() {
 
     v1 = joystickToExpo(joystickY);
     v2 = joystickToExpo(joystickY2);
-    
+
     /*
-    float expo = joystickToExpo(joystickY);
-    float expo2 = joystickToExpo(joystickX2);
+      float expo = joystickToExpo(joystickY);
+      float expo2 = joystickToExpo(joystickX2);
 
-    float vp1 = expo + expo2;
-    float vp2 = expo - expo2;
+      float vp1 = expo + expo2;
+      float vp2 = expo - expo2;
 
-    float avp1 = abs(vp1);
-    float avp2 = abs(vp2);
+      float avp1 = abs(vp1);
+      float avp2 = abs(vp2);
 
-    float scaleCorrect;
+      float scaleCorrect;
 
-    if (avp1 <= 1 && avp2 <= 1) {
+      if (avp1 <= 1 && avp2 <= 1) {
       scaleCorrect = 1;
-    }
-    else {
+      }
+      else {
       scaleCorrect = 1 / max(avp1, avp2);
-    }
+      }
 
-    v1 = vp1 * scaleCorrect;
-    v2 = vp2 * scaleCorrect;
+      v1 = vp1 * scaleCorrect;
+      v2 = vp2 * scaleCorrect;
     */
   }
 
