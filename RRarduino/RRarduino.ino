@@ -43,11 +43,11 @@ void loop() {
   float v1, v2;
 
   if (get_button_value(BTN_UP_2) == PRESSED) {
-    joystickY = approach_speed;
-    joystickY2 = approach_speed;
+    v1 = approach_speed;
+    v2 = approach_speed;
   } else if (get_button_value(BTN_DOWN_2) == PRESSED) {
-    joystickY = -approach_speed;
-    joystickY2 = -approach_speed;
+    v1 = -approach_speed;
+    v2 = -approach_speed;
   } else {
     float expo = joystickToExpo(joystickY);
     float expo2 = joystickToExpo(joystickX2);
@@ -60,7 +60,6 @@ void loop() {
     v1 = vp1*scaleCorrect;
     v2 = vp2*scaleCorrect;
   }
-
 
   setVelocity(motor1, v1 * max_speed);
   setVelocity(motor4, v1 * max_speed);
