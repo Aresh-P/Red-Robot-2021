@@ -10,18 +10,18 @@ AF_DCMotor motor4(4);
 float s = 0.75;
 int max_speed = 255;
 float approach_speed = .5;
+bool motor_forward = true;
 
-bool motorForward = true;
-buttonState button_up_1;
-buttonState button_down_1;
-buttonState button_up_2;
-buttonState button_down_2;
-buttonState button_up_3;
-buttonState button_down_3;
+button_state button_up_1;
+button_state button_down_1;
+button_state button_up_2;
+button_state button_down_2;
+button_state button_up_3;
+button_state button_down_3;
 
-float joystickToExpo(float joystick) {
-  float joystickCubed = joystick * joystick * joystick;
-  return joystickCubed * s + joystick * (1 - s);
+float joystick_to_expo(float joystick) {
+  float joystick_cubed = joystick * joystick * joystick;
+  return joystick_cubed * s + joystick * (1 - s);
 }
 
 void setup() {
@@ -37,16 +37,20 @@ void setup() {
   motor4.run(RELEASE);
 }
 
-void setVelocity(AF_DCMotor motor, float v) {
+void set_velocity(AF_DCMotor motor, float v) {
   motor.setSpeed(min(abs(v), 255));
   motor.run(v >= 0 ? FORWARD : BACKWARD);
 }
 
-void setSides(float vl, float vr) {
-  setVelocity(motor1, vl);
-  setVelocity(motor4, vl);
-  setVelocity(motor2, vr);
-  setVelocity(motor3, vr);
+void set_sides(float vl, float vr) {
+  set_velocity(motor1, vl);
+  set_velocity(motor4, vl);
+  set_velocity(motor2, vr);
+  set_velocity(motor3, vr);
+}
+
+float stickToSlider(float a, float b) {
+  return a / sqrt(1 - min(b * b, 0.5));
 }
 
 void loop() {
@@ -63,8 +67,8 @@ void loop() {
 
   float v1, v2;
 
-  if (button_up_1.justPressed) {
-    motorForward = !motorForward;
+  if (button_up_1.just_pressed) {
+    motor_forward = !motor_forward;
   }
 
   if (button_up_2.pressed) {
@@ -73,23 +77,22 @@ void loop() {
   } else if (button_down_2.pressed) {
     v1 = -approach_speed;
     v2 = -approach_speed;
+  } else if (button_down_1.pressed) {
+    v1 = -approach_speed;
+    v2 = approach_speed;
+  } else if (button_down_3.pressed) {
+    v1 = approach_speed;
+    v2 = -approach_speed;
   } else {
 
-    //v1 = joystickToExpo(joystickY);
-    //v2 = joystickToExpo(joystickY2);
+    float stickY = stickToSlider(joystickY, joystickX);
+    float stickX = stickToSlider(joystickX2, joystickY2);
 
-    v1 = (joystickY + joystickX2) / 2;
-    v2 = (joystickY - joystickX2) / 2;
+    float expo = stickY;
+    float expo2 = joystick_to_expo(stickX);
 
-    /*
-      float expo = joystickToExpo(joystickY);
-      float expo2 = joystickToExpo(joystickX2);
-      float vp1 = expo + expo2;
-      float vp2 = expo - expo2;
-    */
-
-    float vp1 = joystickY + joystickX2;
-    float vp2 = joystickY - joystickX2;
+    float vp1 = expo + expo2;
+    float vp2 = expo - expo2;
 
     float avp1 = abs(vp1);
     float avp2 = abs(vp2);
@@ -107,10 +110,10 @@ void loop() {
     v2 = vp2 * scaleCorrect;
   }
 
-  if (motorForward) {
-    setSides(v1 * max_speed, v2 * max_speed);
+  if (motor_forward) {
+    set_sides(v1 * max_speed, v2 * max_speed);
   } else {
-    setSides(-v2 * max_speed, -v1 * max_speed);
+    set_sides(-v2 * max_speed, -v1 * max_speed);
   }
   delay(30); // IMPORTANT: Don't overload the ESP Chip with too many requests!
 }

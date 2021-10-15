@@ -20,14 +20,14 @@
 #define PRESSED 1
 #define RELEASED 0
 
-struct buttonState {
+struct button_state {
   bool pressed = false;
-  bool prevPressed = false;
-  bool justPressed = false;
-  bool justLifted = false;
+  bool prev_pressed = false;
+  bool just_pressed = false;
+  bool just_lifted = false;
 };
 
-buttonState states[NUM_BTNS];
+button_state states[NUM_BTNS];
 
 void get_joystick_values(float *joystick_x, float *joystick_y) {
   Serial.println('j');
@@ -53,9 +53,9 @@ bool get_button_value(char button) {
   return val.charAt(0) == '1' ? true : false;
 }
 
-void update_button_state(buttonState *state, char id) {
+void update_button_state(button_state *state, char id) {
   state->pressed = get_button_value(id);
-  state->justPressed = !state->prevPressed && state->pressed;
-  state->justLifted = state->prevPressed && !state->pressed;
-  state->prevPressed = state->pressed;
+  state->just_pressed = !state->prev_pressed && state->pressed;
+  state->just_lifted = state->prev_pressed && !state->pressed;
+  state->prev_pressed = state->pressed;
 }
