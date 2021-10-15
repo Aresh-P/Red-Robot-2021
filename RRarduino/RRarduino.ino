@@ -49,6 +49,11 @@ void loop() {
     v1 = -approach_speed;
     v2 = -approach_speed;
   } else {
+
+    v1 = joystickToExpo(joystickY);
+    v2 = joystickToExpo(joystickY2);
+    
+    /*
     float expo = joystickToExpo(joystickY);
     float expo2 = joystickToExpo(joystickX2);
 
@@ -69,6 +74,7 @@ void loop() {
 
     v1 = vp1 * scaleCorrect;
     v2 = vp2 * scaleCorrect;
+    */
   }
 
   setVelocity(motor1, v1 * max_speed);
