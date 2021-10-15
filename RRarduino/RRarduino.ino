@@ -11,14 +11,13 @@ float s = 0.75;
 int max_speed = 255;
 float approach_speed = .5;
 
-bool motorDir = true;
-
-struct buttonState {
-  char id;
-  bool pressed;
-  bool justPressed;
-  bool justLifted;
-};
+bool motorForward = true;
+buttonState button_up_1;
+buttonState button_down_1;
+buttonState button_up_2;
+buttonState button_down_2;
+buttonState button_up_3;
+buttonState button_down_3;
 
 float joystickToExpo(float joystick) {
   float joystickCubed = joystick * joystick * joystick;
@@ -43,18 +42,35 @@ void setVelocity(AF_DCMotor motor, float v) {
   motor.run(v >= 0 ? FORWARD : BACKWARD);
 }
 
+void setSides(float vl, float vr) {
+  setVelocity(motor1, vl);
+  setVelocity(motor4, vl);
+  setVelocity(motor2, vr);
+  setVelocity(motor3, vr);
+}
+
 void loop() {
   float joystickX, joystickY;
   float joystickX2, joystickY2;
   get_joystick_values(&joystickX, &joystickY);
   get_joystick2_values(&joystickX2, &joystickY2);
+  update_button_state(&button_up_1, BTN_UP_1);
+  update_button_state(&button_down_1, BTN_DOWN_1);
+  update_button_state(&button_up_2, BTN_UP_2);
+  update_button_state(&button_down_2, BTN_DOWN_2);
+  update_button_state(&button_up_3, BTN_UP_3);
+  update_button_state(&button_down_3, BTN_DOWN_3);
 
   float v1, v2;
 
-  if (get_button_value(BTN_UP_2) == PRESSED) {
+  if (button_up_1.justPressed) {
+    motorForward = !motorForward;
+  }
+
+  if (button_up_2.pressed) {
     v1 = approach_speed;
     v2 = approach_speed;
-  } else if (get_button_value(BTN_DOWN_2) == PRESSED) {
+  } else if (button_down_2.pressed) {
     v1 = -approach_speed;
     v2 = -approach_speed;
   } else {
@@ -86,32 +102,10 @@ void loop() {
     */
   }
 
-  setVelocity(motor1, v1 * max_speed);
-  setVelocity(motor4, v1 * max_speed);
-  setVelocity(motor2, v2 * max_speed);
-  setVelocity(motor3, v2 * max_speed);
-
-  // motor1.setSpeed(abs(joystickY * max_speed));
-  // motor4.setSpeed(abs(joystickY * max_speed));
-  // motor2.setSpeed(abs(joystickY2 * max_speed));
-  // motor3.setSpeed(abs(joystickY2 * max_speed));
-
-  // motor1.run(joystickY >= 0 ? FORWARD : BACKWARD);
-  // motor4.run(joystickY >= 0 ? FORWARD : BACKWARD);
-  // motor2.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
-  // motor3.run(joystickY2 >= 0 ? FORWARD : BACKWARD);
-
-  //  int speed = int(joystickY * 127);
-  //  int bias = int(joystickX * 127);
-  //  motor1.setSpeed(abs(speed + bias));
-  //  motor4.setSpeed(abs(speed + bias));
-  //  motor2.setSpeed(abs(speed - bias));
-  //  motor3.setSpeed(abs(speed - bias));
-  //
-  //  motor1.run(speed + bias >= 0 ? FORWARD : BACKWARD);
-  //  motor4.run(speed + bias >= 0 ? FORWARD : BACKWARD);
-  //  motor2.run(speed - bias >= 0 ? FORWARD : BACKWARD);
-  //  motor3.run(speed - bias >= 0 ? FORWARD : BACKWARD);
-
+  if (motorForward) {
+    setSides(v1 * max_speed, v2 * max_speed);
+  } else {
+    setSides(-v2 * max_speed, -v1 * max_speed);
+  }
   delay(30); // IMPORTANT: Don't overload the ESP Chip with too many requests!
 }
