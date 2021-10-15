@@ -75,8 +75,11 @@ void loop() {
     v2 = -approach_speed;
   } else {
 
-    v1 = joystickToExpo(joystickY);
-    v2 = joystickToExpo(joystickY2);
+    //v1 = joystickToExpo(joystickY);
+    //v2 = joystickToExpo(joystickY2);
+
+    v1 = (joystickY+joystickX2)/2;
+    v1 = (joystickY-joystickX2)/2;
 
     /*
       float expo = joystickToExpo(joystickY);
