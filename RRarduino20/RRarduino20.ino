@@ -7,6 +7,14 @@ AF_DCMotor motor2(2);
 AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
+
+#include <Servo.h>
+
+Servo lifter1;
+Servo lifter2;
+
+float lifter_pos = 180;
+
 float s = 0.75;
 int max_speed = 255;
 float approach_speed = .5;
@@ -35,6 +43,9 @@ void setup() {
   motor2.run(RELEASE);
   motor3.run(RELEASE);
   motor4.run(RELEASE);
+
+  lifter1.attach(9);
+  lifter2.attach(10);
 }
 
 void set_velocity(AF_DCMotor motor, float v) {
@@ -65,6 +76,10 @@ void loop() {
   update_button_state(&button_up_3, BTN_UP_3);
   update_button_state(&button_down_3, BTN_DOWN_3);
 
+  lifter1.write(180-lifter_pos);
+  lifter2.write(lifter_pos);
+ 
+
   float v1, v2;
 
   if (button_up_1.just_pressed) {
@@ -72,11 +87,13 @@ void loop() {
   }
 
   if (button_up_2.pressed) {
-    v1 = approach_speed;
-    v2 = approach_speed;
+    //v1 = approach_speed;
+    //v2 = approach_speed;
+    lifter_pos = lifter_pos - 8;
   } else if (button_down_2.pressed) {
-    v1 = -approach_speed;
-    v2 = -approach_speed;
+    lifter_pos = lifter_pos + 8;
+    //v1 = -approach_speed;
+    //v2 = -approach_speed;
   } else if (button_down_1.pressed) {
     v1 = -approach_speed;
     v2 = approach_speed;
