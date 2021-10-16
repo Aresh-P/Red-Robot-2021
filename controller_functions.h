@@ -113,7 +113,7 @@ float stick_to_slider(float a, float b) {
     return 0;
   float abs_a = abs(a), abs_b = abs(b);
   float mx = max(abs_a, abs_b), mn = min(abs_a, abs_b);
-  float scaleCorrect = sqrt(1 + (mx * mx) / (mn * mn));
+  float scaleCorrect = sqrt(1 + (mn * mn) / (mx * mx));
   return a * scaleCorrect;
 }
 
