@@ -49,8 +49,13 @@ void set_sides(float vl, float vr) {
   set_velocity(motor3, vr);
 }
 
-float stickToSlider(float a, float b) {
-  return a / sqrt(1 - min(b * b, 0.5));
+float stick_to_slider(float a, float b) {
+  if (a == 0 && b == 0)
+    return 0;
+  float abs_a = abs(a), abs_b = abs(b);
+  float mx = max(abs_a, abs_b), mn = min(abs_a, abs_b);
+  float scaleCorrect = sqrt(1 + (mx * mx) / (mn * mn));
+  return a * scaleCorrect;
 }
 
 void loop() {
@@ -85,8 +90,8 @@ void loop() {
     v2 = -approach_speed;
   } else {
 
-    float stickY = stickToSlider(joystickY, joystickX);
-    float stickX = stickToSlider(joystickX2, joystickY2);
+    float stickY = stick_to_slider(joystickY, joystickX);
+    float stickX = stick_to_slider(joystickX2, joystickY2);
 
     float expo = stickY;
     float expo2 = joystick_to_expo(stickX);
