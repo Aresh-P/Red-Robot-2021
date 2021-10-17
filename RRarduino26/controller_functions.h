@@ -198,5 +198,4 @@ void set_sides(float vl, float vr) {
   set_velocity(motor1, vl);
   set_velocity(motor4, vl);
   set_velocity(motor2, vr);
-  set_velocity(motor3, vr);
 }

@@ -23,11 +23,13 @@ void loop() {
   if (button_up_2.pressed) {
     //v1 = approach_speed;
     //v2 = approach_speed;
-    lifter_pos = lifter_pos - 8;
+    if (lifter_pos >= 8)
+      lifter_pos = lifter_pos - 8;
   } else if (button_down_2.pressed) {
     //v1 = -approach_speed;
     //v2 = -approach_speed;
-    lifter_pos = lifter_pos + 8;
+    if (lifter_pos <= 172)
+      lifter_pos = lifter_pos + 8;
   } else if (button_down_1.pressed) {
     v1 = -approach_speed;
     v2 = approach_speed;
